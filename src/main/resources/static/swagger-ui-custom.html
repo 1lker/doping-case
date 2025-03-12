@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Test Service API - Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/swagger-ui/5.9.0/swagger-ui.css" >
+    <style>
+        .admin-login-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .admin-login-button:hover {
+            background-color: #45a049;
+        }
+        #login-status {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-left: 10px;
+            display: none;
+        }
+        .custom-header {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-header">
+        <button id="admin-login" class="admin-login-button">One-Click Admin Login</button>
+        <span id="login-status">Admin authenticated successfully!</span>
+    </div>
+
+    <div id="swagger-ui"></div>
+
+    <script src="/webjars/swagger-ui/5.9.0/swagger-ui-bundle.js"></script>
+    <script src="/webjars/swagger-ui/5.9.0/swagger-ui-standalone-preset.js"></script>
+    <script>
+    window.onload = function() {
+        // Initialize Swagger UI
+        const ui = SwaggerUIBundle({
+            url: "/v3/api-docs",
+            dom_id: "#swagger-ui",
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            layout: "StandaloneLayout",
+            supportedSubmitMethods: ["get", "post", "put", "delete", "patch", "options"],
+        });
+
+        window.ui = ui;
+        
+        // Admin login button click handler
+        document.getElementById('admin-login').addEventListener('click', function() {
+            // Show loading state
+            this.textContent = 'Loading...';
+            this.disabled = true;
+            
+            // Call the dev endpoint to get admin token
+            fetch('/api/dev/admin-auth')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Admin authentication successful');
+                    
+                    // Set the authorization token in Swagger UI
+                    ui.authActions.authorize({
+                        bearerAuth: {
+                            name: "bearerAuth",
+                            schema: { type: "http", scheme: "bearer", bearerFormat: "JWT" },
+                            value: data.token
+                        }
+                    });
+                    
+                    // Update UI to show success
+                    document.getElementById('admin-login').textContent = 'Admin Login Successful';
+                    document.getElementById('login-status').style.display = 'inline';
+                    
+                    // Store token in localStorage for persistence
+                    localStorage.setItem('admin_token', data.token);
+                })
+                .catch(error => {
+                    console.error('Error authenticating admin:', error);
+                    document.getElementById('admin-login').textContent = 'Login Failed - Try Again';
+                    document.getElementById('admin-login').disabled = false;
+                });
+        });
+        
+        // Check if we have a stored token and use it
+        const storedToken = localStorage.getItem('admin_token');
+        if (storedToken) {
+            ui.authActions.authorize({
+                bearerAuth: {
+                    name: "bearerAuth",
+                    schema: { type: "http", scheme: "bearer", bearerFormat: "JWT" },
+                    value: storedToken
+                }
+            });
+            document.getElementById('admin-login').textContent = 'Admin Login Successful';
+            document.getElementById('login-status').style.display = 'inline';
+        }
+    }
+    </script>
+</body>
+</html> 
