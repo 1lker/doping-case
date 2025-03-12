@@ -17,6 +17,7 @@ A RESTful service that allows students to take tests, answer questions, and view
 - Unit tests
 - Pagination for list endpoints
 - JWT Authentication and Authorization
+- Custom Swagger UI with one-click admin authentication
 
 ---
 
@@ -31,6 +32,7 @@ A RESTful service that allows students to take tests, answer questions, and view
 - Birim testleri
 - Liste uç noktaları için sayfalama
 - JWT Kimlik Doğrulama ve Yetkilendirme
+- Tek tıklamayla admin kimlik doğrulaması içeren özel Swagger UI
 
 ## Technologies / Teknolojiler
 
@@ -41,7 +43,9 @@ A RESTful service that allows students to take tests, answer questions, and view
 - Spring Cache
 - Spring Security
 - JWT (JSON Web Token)
-- Swagger/OpenAPI
+- Swagger/OpenAPI 3.0
+- SpringDoc OpenAPI
+- Custom Swagger UI with admin authentication
 - H2 In-memory Database
 - JUnit 5 & Mockito
 - Maven
@@ -175,6 +179,7 @@ Proje, katmanlı bir mimari izler:
 4. Access the application / Uygulamaya erişin
    - API: `http://localhost:8080/api/`
    - Swagger UI: `http://localhost:8080/swagger-ui.html`
+   - Custom Swagger UI: `http://localhost:8080/swagger`
    - H2 Console: `http://localhost:8080/h2-console`
 
 ### H2 Database Connection / H2 Veritabanı Bağlantısı
@@ -188,6 +193,15 @@ Proje, katmanlı bir mimari izler:
 The application uses JWT (JSON Web Token) for authentication. To access protected endpoints, you need to:
 
 Uygulama, kimlik doğrulama için JWT (JSON Web Token) kullanır. Korumalı uç noktalara erişmek için:
+
+### Using Swagger UI with One-Click Authentication / Tek Tıklamayla Kimlik Doğrulama ile Swagger UI Kullanımı
+
+1. Navigate to our custom Swagger UI: `http://localhost:8080/swagger`
+2. Click the "One-Click Admin Login" button at the top of the page
+3. The system will automatically create an admin user (if it doesn't exist) and authenticate you
+4. All API requests made through the Swagger UI will now include the JWT token
+
+### Manual Authentication / Manuel Kimlik Doğrulama
 
 1. Register a user / Bir kullanıcı kaydı oluşturun
    ```bash
@@ -235,6 +249,32 @@ Uygulama, performansı artırmak için Spring'in önbellekleme mekanizmasını k
 - `studentsPage`: Caches paginated student results / Sayfalanmış öğrenci sonuçlarını önbelleğe alır
 - `testsPage`: Caches paginated test results / Sayfalanmış test sonuçlarını önbelleğe alır
 - `participationsPage`: Caches paginated participation results / Sayfalanmış katılım sonuçlarını önbelleğe alır
+
+## API Development and Testing / API Geliştirme ve Test Etme
+
+### Using Custom Swagger UI / Özel Swagger UI Kullanımı
+
+The project includes a custom Swagger UI integration with one-click admin authentication for easier API testing and development:
+
+Proje, API testini ve geliştirmesini kolaylaştırmak için tek tıklamayla admin kimlik doğrulaması içeren özel bir Swagger UI entegrasyonu içerir:
+
+1. Start the application with dev profile active: `./mvnw spring-boot:run -Dspring.profiles.active=dev`
+2. Navigate to `http://localhost:8080/swagger`
+3. Click the "One-Click Admin Login" button
+4. You'll see a success message when authenticated
+5. Now you can test all API endpoints with full admin privileges
+6. The authentication token is stored in browser local storage, so it persists between page refreshes
+
+#### Security Considerations / Güvenlik Hususları
+
+The one-click admin authentication feature is intended for development and testing environments only. In production, you should:
+
+Tek tıklamayla admin kimlik doğrulaması özelliği yalnızca geliştirme ve test ortamları için tasarlanmıştır. Üretim ortamında şunları yapmalısınız:
+
+- Disable the `/api/dev/admin-auth` endpoint or ensure it's only available in dev/test profiles
+- Use proper user registration and authentication
+- Implement appropriate access controls
+- Consider using API keys for third-party integrations
 
 ## Testing / Test Etme
 
