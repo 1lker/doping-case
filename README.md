@@ -168,12 +168,12 @@ Proje, katmanlı bir mimari izler:
 
 2. Build the project / Projeyi derleyin
    ```bash
-   ./mvnw clean install
+   mvn clean install
    ```
 
 3. Run the application / Uygulamayı çalıştırın
    ```bash
-   ./mvnw spring-boot:run
+   mvn spring-boot:run
    ```
 
 4. Access the application / Uygulamaya erişin
