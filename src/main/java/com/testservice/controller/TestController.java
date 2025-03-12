@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +29,15 @@ public class TestController {
     }
 
     @GetMapping
-    @Operation(summary = "Tüm testleri listeler")
-    public ResponseEntity<List<TestResponse>> getAllTests() {
+    @Operation(summary = "Tüm testleri listeler", description = "Sayfalama özellikleri ile tüm testleri listeler. Varsayılan sayfa boyutu 10'dur.")
+    public ResponseEntity<Page<TestResponse>> getAllTests(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(testService.getAllTestsPaged(pageable));
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Tüm testleri sayfalanmadan listeler")
+    public ResponseEntity<List<TestResponse>> getAllTestsWithoutPagination() {
         return ResponseEntity.ok(testService.getAllTests());
     }
 

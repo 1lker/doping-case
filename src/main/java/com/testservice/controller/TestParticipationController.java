@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +30,15 @@ public class TestParticipationController {
     }
 
     @GetMapping
-    @Operation(summary = "Tüm test katılımlarını listeler")
-    public ResponseEntity<List<TestParticipationResponse>> getAllParticipations() {
+    @Operation(summary = "Tüm test katılımlarını listeler", description = "Sayfalama özellikleri ile tüm test katılımlarını listeler. Varsayılan sayfa boyutu 10'dur.")
+    public ResponseEntity<Page<TestParticipationResponse>> getAllParticipations(
+            @PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        return ResponseEntity.ok(participationService.getAllParticipationsPaged(pageable));
+    }
+
+    @GetMapping("/all")
+    @Operation(summary = "Tüm test katılımlarını sayfalanmadan listeler")
+    public ResponseEntity<List<TestParticipationResponse>> getAllParticipationsWithoutPagination() {
         return ResponseEntity.ok(participationService.getAllParticipations());
     }
 
