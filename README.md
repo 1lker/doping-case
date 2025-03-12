@@ -158,7 +158,7 @@ Proje, katmanlı bir mimari izler:
 
 1. Clone the repository / Depoyu klonlayın
    ```bash
-   git clone https://github.com/yourusername/student-test-service.git
+   git clone https://github.com/1lker/student-test-service.git
    cd student-test-service
    ```
 
