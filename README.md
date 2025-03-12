@@ -258,7 +258,7 @@ The project includes a custom Swagger UI integration with one-click admin authen
 
 Proje, API testini ve geliştirmesini kolaylaştırmak için tek tıklamayla admin kimlik doğrulaması içeren özel bir Swagger UI entegrasyonu içerir:
 
-1. Start the application with dev profile active: `./mvnw spring-boot:run -Dspring.profiles.active=dev`
+1. Start the application with dev profile active: `mvn spring-boot:run -Dspring.profiles.active=dev`
 2. Navigate to `http://localhost:8080/swagger`
 3. Click the "One-Click Admin Login" button
 4. You'll see a success message when authenticated
@@ -283,7 +283,7 @@ Run the tests with:
 Testleri şu şekilde çalıştırın:
 
 ```bash
-./mvnw test
+mvn test
 ```
 
 ## Project Evaluation / Proje Değerlendirmesi
