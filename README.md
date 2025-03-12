@@ -162,8 +162,8 @@ Proje, katmanlı bir mimari izler:
 
 1. Clone the repository / Depoyu klonlayın
    ```bash
-   git clone https://github.com/1lker/student-test-service.git
-   cd student-test-service
+   git clone https://github.com/1lker/doping-case.git
+   cd doping-case
    ```
 
 2. Build the project / Projeyi derleyin
